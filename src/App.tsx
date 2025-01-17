@@ -6,7 +6,7 @@ export default function App() {
   return (
     <>
       <Navbar />
-      <main>
+      <main className="main bg-dark">
         <Outlet />
       </main>
       <Footer />
