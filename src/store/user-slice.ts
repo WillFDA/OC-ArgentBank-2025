@@ -22,8 +22,9 @@ export const UserSlice = createSlice({
     setLastName: (state, action: PayloadAction<string>) => {
       state.lastName = action.payload;
     },
-    setEditing: (state) => {
-      state.editing = !state.editing;
+    setEditing: (state, action: PayloadAction<boolean | undefined>) => {
+      state.editing =
+        action.payload === undefined ? !state.editing : action.payload;
     },
   },
 });

@@ -26,18 +26,14 @@ export default function Navbar() {
         />
         <h1 className="sr-only">Argent Bank</h1>
       </Link>
-      <div>
+      <div className="main-nav-item-container">
         {isLoggedIn ? (
           <>
             <Link className="main-nav-item" to="/user">
               <i className="fa fa-user-circle"></i>
               {firstName}
             </Link>
-            <Link
-              onClick={handleSignOut}
-              className="main-nav-item"
-              to="/sign-in"
-            >
+            <Link onClick={handleSignOut} className="main-nav-item" to="/">
               <i className="fa fa-sign-out"></i>
               Sign Out
             </Link>

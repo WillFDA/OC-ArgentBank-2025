@@ -26,6 +26,7 @@ export default function Profile() {
       dispatch(setFirstName(data.body.firstName));
       dispatch(setLastName(data.body.lastName));
     });
+    dispatch(setEditing(false));
   }, [token, dispatch, navigate]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -41,11 +42,21 @@ export default function Profile() {
     <>
       <div className="header">
         {editing ? (
-          <form onSubmit={handleSubmit}>
-            <input type="text" name="firstName" defaultValue={firstName} />
-            <input type="text" name="lastName" defaultValue={lastName} />
-            <button type="submit">Save</button>
-          </form>
+          <div className="user-form">
+            <form onSubmit={handleSubmit}>
+              <div className="input-wrapper">
+                <label htmlFor="firstName">Prénom</label>
+                <input type="text" name="firstName" defaultValue={firstName} />
+              </div>
+              <div className="input-wrapper">
+                <label htmlFor="lastName">Nom</label>
+                <input type="text" name="lastName" defaultValue={lastName} />
+              </div>
+              <button className="sign-in-button" type="submit">
+                Save
+              </button>
+            </form>
+          </div>
         ) : (
           <h1>
             Welcome back
