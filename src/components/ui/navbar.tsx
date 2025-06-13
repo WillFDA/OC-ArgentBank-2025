@@ -6,13 +6,14 @@ import { RootState } from "../../store/store";
 
 export default function Navbar() {
   const dispatch = useDispatch();
-  const isLoggedIn =
+  let isLoggedIn =
     useSelector((state: RootState) => state.signin.token) ||
     localStorage.getItem("token");
 
   const handleSignOut = () => {
     dispatch(setToken(""));
     localStorage.removeItem("token");
+    isLoggedIn = "";
   };
   const firstName = useSelector((state: RootState) => state.user.firstName);
 
@@ -29,7 +30,7 @@ export default function Navbar() {
       <div className="main-nav-item-container">
         {isLoggedIn ? (
           <>
-            <Link className="main-nav-item" to="/user">
+            <Link className="main-nav-item" to="/profile">
               <i className="fa fa-user-circle"></i>
               {firstName}
             </Link>
