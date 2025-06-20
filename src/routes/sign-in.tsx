@@ -1,30 +1,33 @@
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import {
   setEmail,
   setPassword,
   setRememberMe,
-  setToken,
+  signInUser,
 } from "../store/signin-slice";
-import { RootState } from "../store/store";
-import { signin } from "../utils/signin";
+import { AppDispatch, RootState } from "../store/store";
 
 export default function SignIn() {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const email = useSelector((state: RootState) => state.signin.email);
   const password = useSelector((state: RootState) => state.signin.password);
   const rememberMe = useSelector((state: RootState) => state.signin.rememberMe);
-
+  const token =
+    useSelector((state: RootState) => state.signin.token) ||
+    localStorage.getItem("token");
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    signin(email, password, rememberMe).then((data) => {
-      if (data.status === 200) {
-        navigate("/profile");
-        dispatch(setToken(data.body.token));
-      }
-    });
+    dispatch(signInUser({ email, password }));
   };
+
+  useEffect(() => {
+    if (token) {
+      navigate("/profile");
+    }
+  }, [token, navigate]);
 
   return (
     <section className="sign-in-content">

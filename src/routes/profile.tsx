@@ -1,13 +1,12 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
-import { RootState } from "../store/store";
-import { setEditing, setFirstName, setLastName } from "../store/user-slice";
-import { getUser, updateUser } from "../utils/user";
+import { AppDispatch, RootState } from "../store/store";
+import { getUser, setEditing, updateUser } from "../store/user-slice";
 
 export default function Profile() {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const editing = useSelector((state: RootState) => state.user.editing);
   const firstName =
     useSelector((state: RootState) => state.user.firstName) || "";
@@ -22,24 +21,27 @@ export default function Profile() {
       navigate("/sign-in");
       return;
     }
-    getUser(token).then((data) => {
-      dispatch(setFirstName(data.body.firstName));
-      dispatch(setLastName(data.body.lastName));
-    });
+    dispatch(getUser(token));
     dispatch(setEditing(false));
   }, [token, dispatch, navigate]);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.target as HTMLFormElement);
-    dispatch(setFirstName(formData.get("firstName") as string));
-    dispatch(setLastName(formData.get("lastName") as string));
     dispatch(setEditing());
-    updateUser(token, formData);
+    dispatch(updateUser({ token, formData }));
   };
 
+  const isLoading = useSelector(
+    (state: RootState) => state.user.getUserState.isLoading
+  );
+  const error = useSelector(
+    (state: RootState) => state.user.getUserState.error
+  );
   return (
     <>
+      {isLoading && <p>Loading...</p>}
+      {error && <p>{error}</p>}
       <div className="header">
         {editing ? (
           <div className="user-form">
